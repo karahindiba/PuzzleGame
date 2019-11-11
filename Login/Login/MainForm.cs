@@ -135,10 +135,10 @@ namespace Login
             }
 
             if (EmptyPoint.X == 180 && EmptyPoint.Y == 180)
-                CheckValid();
+                CheckSolution();
         }
 
-        private void CheckValid()
+        private void CheckSolution()
         {
             int count = 0, index;
             foreach (Button btn in panel3.Controls)
