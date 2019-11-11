@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,6 +26,7 @@ namespace Login
         {
             Application.Exit();
         }
+
         Point LastPoint;
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
@@ -54,9 +55,9 @@ namespace Login
             foreach (Button b in panel3.Controls)
                 b.Enabled = true;
 
-            Image orginal = Image.FromFile(@"C:\Users\gavri.000\Documents\Visual Studio 2017\Projects\Login\Login\images\image.jpg");
+            Image fullImage = Image.FromFile(@"C:\Users\gavri.000\Documents\Visual Studio 2017\Projects\Login\Login\images\image.jpg");
 
-            cropImageTomages(orginal, 270, 270);
+            CropImage(fullImage, 270, 270);
 
             AddImagesToButtons(images);
         }
@@ -66,7 +67,7 @@ namespace Login
             int i = 0;
             int[] arr = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
-            arr = suffle(arr);
+            arr = Shuffle(arr);
 
             foreach (Button b in panel3.Controls)
             {
@@ -78,42 +79,41 @@ namespace Login
             }
         }
 
-        private int[] suffle(int[] arr)
+        private int[] Shuffle(int[] arr)
         {
             Random rand = new Random();
             arr = arr.OrderBy(x => rand.Next()).ToArray();
             return arr;
         }
 
-        private void cropImageTomages(Image orginal, int w, int h)
+        private void CropImage(Image fullImage, int w, int h)
         {
             Bitmap bmp = new Bitmap(w, h);
 
             Graphics graphic = Graphics.FromImage(bmp);
 
-            graphic.DrawImage(orginal, 0, 0, w, h);
+            graphic.DrawImage(fullImage, 0, 0, w, h);
 
             graphic.Dispose();
 
-            int movr = 0, movd = 0;
+            int moveR = 0, moveD = 0;
 
             for (int x = 0; x < 8; x++)
             {
-                Bitmap piece = new Bitmap(90, 90);
+                Bitmap bmp1 = new Bitmap(90, 90);
 
                 for (int i = 0; i < 90; i++)
                     for (int j = 0; j < 90; j++)
-                        piece.SetPixel(i, j,
-                            bmp.GetPixel(i + movr, j + movd));
+                        bmp1.SetPixel(i, j, bmp.GetPixel(i + moveR, j + moveD));
 
-                images.Add(piece);
+                images.Add(bmp1);
 
-                movr += 90;
+                moveR += 90;
 
-                if (movr == 270)
+                if (moveR == 270)
                 {
-                    movr = 0;
-                    movd += 90;
+                    moveR = 0;
+                    moveD += 90;
                 }
             }
 
@@ -126,10 +126,8 @@ namespace Login
 
         private void MoveButton(Button btn)
         {
-            if (((btn.Location.X == EmptyPoint.X - 90 || btn.Location.X == EmptyPoint.X + 90)
-                && btn.Location.Y == EmptyPoint.Y)
-                || (btn.Location.Y == EmptyPoint.Y - 90 || btn.Location.Y == EmptyPoint.Y + 90)
-                && btn.Location.X == EmptyPoint.X)
+            if (((btn.Location.X == EmptyPoint.X - 90 || btn.Location.X == EmptyPoint.X + 90) && btn.Location.Y == EmptyPoint.Y)
+                || (btn.Location.Y == EmptyPoint.Y - 90 || btn.Location.Y == EmptyPoint.Y + 90) && btn.Location.X == EmptyPoint.X)
             {
                 Point swap = btn.Location;
                 btn.Location = EmptyPoint;
@@ -150,7 +148,7 @@ namespace Login
                     count++;
             }
             if (count == 8)
-                MessageBox.Show("well done you win!");
+                MessageBox.Show("Победа!");
         }
     }
 }
